@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/myapp  # Destination path on the EC2 instances
+hooks:
+  AfterInstall:
+    - location: scripts/install.sh  # A script to execute after deployment (if needed)
+      runas: ec2-user  # Replace with the appropriate user
