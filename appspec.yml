@@ -3,6 +3,3 @@ os: linux
 files:
   - source: /
     destination: /home/ec2-user # Destination path on the EC2 instances
-hooks:
-  AfterInstall:
-    - location: scripts/install.sh  # A script to execute after deployment (if needed)
