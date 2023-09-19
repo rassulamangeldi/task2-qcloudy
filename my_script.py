@@ -1,29 +1,37 @@
-import json
-import requests
+import boto3
 
 def get_instance_info():
-    # Get the instance ID from the EC2 metadata service
-    response = requests.get("http://169.254.169.254/latest/meta-data/instance-id")
-    instance_id = response.text
+    # Create an EC2 client
+    ec2 = boto3.client('ec2')
 
-    # Get the public IP address from the EC2 metadata service
-    response = requests.get("http://169.254.169.254/latest/meta-data/public-ipv4")
-    public_ip = response.text
+    # Specify the filters to find the running EC2 instance with your key-value pair
+    filters = [
+        {'Name': 'tag:Name', 'Values': ['ASG-Task-Instance']},
+        {'Name': 'instance-state-name', 'Values': ['running']}
+    ]
 
-    # Create a dictionary with the instance information
-    instance_info = {
-        "instance_id": instance_id,
-        "public_ip": public_ip
-    }
+    # Use the filters to describe instances
+    instances = ec2.describe_instances(Filters=filters)
 
-    return instance_info
-    
-if __name__ == "__main__":
+    # Check if instances were found
+    if instances['Reservations']:
+        # Get the first instance (assuming only one instance matches the filter)
+        instance = instances['Reservations'][0]['Instances'][0]
+
+        # Extract instance ID and public IP address
+        instance_id = instance['InstanceId']
+        public_ip = instance.get('PublicIpAddress', 'N/A')  # If public IP not available, set to 'N/A'
+
+        # Create a dictionary to hold the instance information
+        instance_info = {
+            'InstanceId': instance_id,
+            'PublicIpAddress': public_ip
+        }
+
+        return instance_info
+    else:
+        return {'message': 'No running instances matching the filter were found.'}
+
+if __name__ == '__main__':
     instance_info = get_instance_info()
-
-    # Convert the instance info dictionary to JSON format
-    instance_info_json = json.dumps(instance_info, indent=4)
-
-    # Print the JSON response
-    print(instance_info_json)
-
+    print(instance_info)
