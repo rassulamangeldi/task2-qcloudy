@@ -1,8 +1,8 @@
-version: 0.2\
-\
-phases:\
-  build:\
-    commands:\
-      - pip install requests  # Install requests library\
-      - python my_script.py  # Run your Python script\
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - pip install requests  # Install requests library
+      - python my_script.py  # Run your Python script
 }
