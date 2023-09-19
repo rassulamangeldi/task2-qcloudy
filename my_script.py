@@ -26,4 +26,4 @@ if __name__ == "__main__":
 
     # Print the JSON response
     print(instance_info_json)
-}
+
