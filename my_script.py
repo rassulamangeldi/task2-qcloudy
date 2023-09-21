@@ -6,7 +6,7 @@ def get_instance_info():
 
     # Specify the filters to find the running EC2 instance with your key-value pair
     filters = [
-        {'Name': 'tag:Name', 'Values': ['ASG-Task-Instance']},
+        {'Name': 'tag:Name', 'Values': ['task-instance']},
         {'Name': 'instance-state-name', 'Values': ['running']}
     ]
 
